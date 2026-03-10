@@ -31,8 +31,9 @@ export class TechCrunchSource implements DataSource {
       $('article, .post-block').each((_index, element) => {
         const $el = $(element);
 
-        const $link = $el.find('a[href*="techcrunch.com"]').first()
-          || $el.find('h2 a, h3 a').first();
+        const $primaryLink = $el.find('a[href*="techcrunch.com"]').first();
+        const $fallbackLink = $el.find('h2 a, h3 a').first();
+        const $link = $primaryLink.length > 0 ? $primaryLink : $fallbackLink;
 
         const title = $el.find('h2, h3').first().text().trim();
         const url = $link.attr('href') || '';

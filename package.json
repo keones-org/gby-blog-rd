@@ -1,0 +1,35 @@
+{
+  "name": "ai-hot-topic-analysis",
+  "version": "1.0.0",
+  "description": "AI热点数据分析系统 - 每日自动抓取AI领域热点，生成分析报告并推送至指定邮箱",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "report": "ts-node src/cli.ts"
+  },
+  "keywords": ["ai", "hot-topics", "analysis", "email-report"],
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0",
+    "cron": "^3.1.0",
+    "dotenv": "^16.4.0",
+    "handlebars": "^4.7.8",
+    "nodemailer": "^6.9.0",
+    "openai": "^4.60.0",
+    "winston": "^3.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/nodemailer": "^6.4.15",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.5.0"
+  }
+}

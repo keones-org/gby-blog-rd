@@ -14,6 +14,12 @@ const AI_KEYWORDS = [
   'fine-tune', 'finetune', 'lora', 'qlora', 'stable-diffusion',
 ];
 
+/** 预编译关键词正则，使用词边界和连字符作为分隔符避免子串误匹配 */
+const AI_KEYWORD_PATTERNS = AI_KEYWORDS.map(keyword => {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[\\s\\-_/])${escaped}($|[\\s\\-_/])`, 'i');
+});
+
 /**
  * GitHub Trending 数据源
  * 从 GitHub Trending 中筛选 AI 相关项目
@@ -46,9 +52,9 @@ export class GitHubTrendingSource implements DataSource {
           || $el.find('[class*="star"]').last().text().trim();
         const stars = parseInt(starsText.replace(/[^0-9]/g, ''), 10) || 0;
 
-        const fullText = `${repoName} ${description}`.toLowerCase();
-        const isAiRelated = AI_KEYWORDS.some(keyword =>
-          fullText.includes(keyword)
+        const fullText = `${repoName} ${description}`;
+        const isAiRelated = AI_KEYWORD_PATTERNS.some(pattern =>
+          pattern.test(fullText)
         );
 
         if (isAiRelated && repoName) {

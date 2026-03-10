@@ -13,6 +13,12 @@ const AI_KEYWORDS = [
   'multimodal', 'embedding', 'tokenizer', 'inference',
 ];
 
+/** 预编译关键词正则，使用词边界避免子串误匹配 */
+const AI_KEYWORD_PATTERNS = AI_KEYWORDS.map(keyword => {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`\\b${escaped}\\b`, 'i');
+});
+
 interface HNItem {
   id: number;
   title?: string;
@@ -56,9 +62,8 @@ export class HackerNewsSource implements DataSource {
       for (const item of items) {
         if (!item || !item.title) continue;
 
-        const titleLower = item.title.toLowerCase();
-        const isAiRelated = AI_KEYWORDS.some(keyword =>
-          titleLower.includes(keyword)
+        const isAiRelated = AI_KEYWORD_PATTERNS.some(pattern =>
+          pattern.test(item.title!)
         );
 
         if (isAiRelated) {
